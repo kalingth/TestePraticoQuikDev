@@ -1,0 +1,1058 @@
+{
+	"info": {
+		"_postman_id": "5a41dbc8-a8c9-4473-868d-8d3c203a1f8d",
+		"name": "QuikDevTest",
+		"description": "# Introdução\n\nTeste prático para desenvolvedores Back-  \nend.\n\n# Resumo\n\nEste teste busca identificar diferentes níveis de habilidade, medindo conhecimento,  \norganização e esforço.\n\n# Autenticação\n\nAs autenticações são feitas por HTTPBasicAuth e pelo token gerado no momento dessa primeira autenticação.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Scope",
+			"item": [
+				{
+					"name": "Add New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"wallace.u8@gmail.com\",\r\n    \"password\": \"p@ssw0rd\",\r\n    \"name\": \"Wallace Rocha Faria\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "Aqui, será criado um usuário através de uma requisição do verbo POST ao endpoint /users/"
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"token\", jsonData.token);\r",
+									"pm.globals.set(\"userId\", jsonData.data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "wallace.u8@gmail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "p@ssw0rd",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/auth/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"auth",
+								""
+							]
+						},
+						"description": "No login, será realizada a autenticação do usuário através do email e da senha informados anteriormente."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/users/{{userId}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"{{userId}}",
+								""
+							]
+						},
+						"description": "Através deste endpoint o usuário poderá recuperar seus dados. O usuário jamais poderá acessar os dados de outros usuários!"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User with PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"wallace.u8@gmail.com\",\r\n    \"password\": \"p@ssw0rd\",\r\n    \"name\": \"Wallace R. Faria\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/{{userId}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"{{userId}}",
+								""
+							]
+						},
+						"description": "Através do mesmo endpoint do verbo GET, com o PUT o usuário poderá editar suas informações, desde que ele as edite em lote. Ou seja, deverá ao menos evocar as chamadas realizadas no POST quando a conta foi criada."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User with PATCH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"wallace13@hotmail.com.br\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/users/{{userId}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"{{userId}}",
+								""
+							]
+						},
+						"description": "Através do mesmo endpoint dos últimos verbos, com o PATCH o usuário poderá editar suas informações individualmente. Ou seja, o usuário poderá editar, exclusivamente, a informação que ele desejar."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"userId\", null);\r",
+									"pm.globals.set(\"token\", null);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/users/{{userId}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"{{userId}}",
+								""
+							]
+						},
+						"description": "Através do mesmo endpoint dos últimos verbos, com o DELETE o usuário poderá deletar seus dados da plataforma. Assim como qualquer outro método neste endpoint, somente administradores ou o próprio usuário poderão utilizar esses métodos em sua conta."
+					},
+					"response": []
+				}
+			],
+			"description": "Através desse grupo de requisições, foram realizados testes simulando iterações reais de usuários com seus próprios dados."
+		},
+		{
+			"name": "Post Scope",
+			"item": [
+				{
+					"name": "Make Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"lastPostId\", jsonData.data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Hello World\",\r\n    \"description\": \"My first post!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								""
+							]
+						},
+						"description": "Através desse endpoint, com o verbo POST, o usuário poderá criar suas requisições."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								""
+							]
+						},
+						"description": "Através desse endpoint com o verbo GET, o usuário será capaz de recuperar qualquer postagem já realizada."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post with PATCH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"That wasn't my first post now!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								""
+							]
+						},
+						"description": "Através do mesmo endpoint do verbo GET, o usuário poderá atualizar suas próprias requisições, desde que o identificador da postagem passado na URI se refira a uma postagem dele."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post with PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"That wasn't my first post now!\",\r\n    \"description\": \"But still a Hello World Post. =)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								""
+							]
+						},
+						"description": "Através do mesmo endpoint dos outros dois verbos, o usuário poderá atualizar suas postagens em lote - sendo opcional informar o título ou a descrição -, desde que o identificador da postagem passado na URI se refira a uma postagem dele."
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"lastUploadedImage\", jsonData.data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"b64_image\": \"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\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/images/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"images",
+								""
+							]
+						},
+						"description": "Através deste endpoint o usuário poderá realizar o upload de imagens em suas próprias postagens."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/images/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"images",
+								""
+							]
+						},
+						"description": "Através deste endpoint os usuários poderão recuperar as imagens adicionadas às postagens pelos seus respectivos donos."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/images/{{lastUploadedImage}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"images",
+								"{{lastUploadedImage}}"
+							]
+						},
+						"description": "Através desse endpoint, com o verbo Delete, o usuário poderá deletar uma imagem pelo ID - desde que eles mesmo tenha subido essa imagem no servidor."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"lastPostId\", null);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								""
+							]
+						},
+						"description": "Através do verbo Delete neste endpoint o dono da postagem ou o administrador do servidor poderá deletar a postagem. A adição da possibilidade de exclusão da postagem pelo administrador foi adicionada para que haja moderação no serviço."
+					},
+					"response": []
+				}
+			],
+			"description": "Através desse grupo de requisições, foram realizados testes simulando postagens reais de usuários."
+		},
+		{
+			"name": "Comment Scope",
+			"item": [
+				{
+					"name": "Make Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"commentId\", jsonData.data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"That't is really your first post?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/comments/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"comments",
+								""
+							]
+						},
+						"description": "Através desse endpoint, com o método POST o usuário poderá criar comentários nas postagens de outros usuários."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/comments/{{commentId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"comments",
+								"{{commentId}}",
+								""
+							]
+						},
+						"description": "Através deste endpoint, utilizando o verbo GET o usuário poderá recuperar um comentários de outros usuários em postagens da plataforma."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Comments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/comments/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"comments",
+								""
+							]
+						},
+						"description": "Através deste endpoint, com o método GET, o usuário poderá recuperar todos os comentário de outros usuários em postagens da plataforma."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"That't is really your first post? I think that was not!!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/comments/{{commentId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"comments",
+								"{{commentId}}",
+								""
+							]
+						},
+						"description": "Através deste endpoit, utilizando o verbo PATCH o dono do comentário poderá editar seu próprio comentário na postagem."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"commentId\", null);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/posts/{{lastPostId}}/comments/{{commentId}}/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"posts",
+								"{{lastPostId}}",
+								"comments",
+								"{{commentId}}",
+								""
+							]
+						},
+						"description": "Através deste endpoint, utilizando o verbo DELETE o dono da postagem, o dono do comentário ou o administrador do servidor poderá deletar comentários da plataforma."
+					},
+					"response": []
+				}
+			],
+			"description": "Através desse grupo de requisições, foram realizados testes simulando comentários reais de usuários."
+		},
+		{
+			"name": "Admin Scope",
+			"item": [
+				{
+					"name": "Login as Root",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"adminToken\", jsonData.token);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "root@domain.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "root",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/auth/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"auth",
+								""
+							]
+						},
+						"description": "Através do endpoint de autenticação convencional (utilizada pelos outros usuários) o administrador poderá acessar o sistema com suas credenciais."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "Através deste endpoint, o administrador poderá acessar as informações de todos os usuários. Caso o serviço escale, pode ser necessário filtrar os dados retornados com o comando LIMIT e escolher a fatia dos dados a serem recuperadas com o OFFSET."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/summary/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"summary",
+								""
+							]
+						},
+						"description": "Através deste endpoint o administrador poderá acessar um resumo de utilização da plataforma. Assim como o endpoint acima, caso o serviço escale, será necessário filtras os dados com LIMIT e OFFSET."
+					},
+					"response": []
+				}
+			],
+			"description": "Neste conjunto de requisições, será simulada a utilização de endpoints exclusivos para administradores."
+		}
+	]
+}
