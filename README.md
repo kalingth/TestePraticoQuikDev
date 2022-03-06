@@ -165,6 +165,9 @@ wall@kalingth:~$ python main.py
 &nbsp;&nbsp;&nbsp;&nbsp;Neste momento o próprio servidor criará as dependencias necessárias para o seu correto funcionamento.<br>
 
 &nbsp;&nbsp;&nbsp;&nbsp;Para utilizar os testes desenvolvidos, basta acessar a pasta ***Testes*** através de outro **Terminal**/**Prompt**/**Shell** e rodar o comando ***py TestesEmLote.py*** e você obterá um retorno parecido com esse:
+
+> **Nota**: É extremamente importante que modifique pelo menos o email do usuário 1 do arquivo de testes para que seja testado o recebimento do email.
+
 ```console
 wall@kalingth:~$ py TestesEmLote.py
 
