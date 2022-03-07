@@ -25,6 +25,16 @@ def testCreateAndLogin(usersList):
     tc.assertEqual(requests.post(routeUser, json=usersList[0]).status_code, 409)
     print("Ok")
 
+    # Não deve ser possível criar um usuário com e-mail inválido    
+    print("Tentando criar um usuário com um email inválido...".ljust(100), end="")
+    invalidEmail = {
+        "name": "Teste Email Invalido",
+        "email": "teste@email@invalido.com",
+        "password": "Senha123"
+    }
+    tc.assertEqual(requests.post(routeUser, json=invalidEmail).status_code, 400)
+    print("Ok")
+    
     # Não deve ser possível ter acesso ao sistema sem estar logado.
     print("Tentando acessar uma conta inexistente...".ljust(100), end="")
     tc.assertEqual(requests.post(routeAuth, auth=("teste@teste.com", "1234")).status_code, 401)
