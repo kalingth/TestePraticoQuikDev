@@ -4,11 +4,14 @@ from flask import request, jsonify
 from ..Models.users import Users, user_schema
 from sqlalchemy.exc import IntegrityError, NoResultFound
 import MISC.CONSTANTS as CONSTS
+from ..Controller import validator
 
 
 def createUser() -> tuple:
     try:
         email = request.json["email"]
+        if not validator.validateEmail(email):
+            return jsonify({"success": False, "message": "This not seems a valid email!", "data": {}}), 400
         password = request.json["password"]
         name = request.json["name"]
         passwordHash = str(sha512(password.encode()).hexdigest())
@@ -45,11 +48,13 @@ def putUpdateUsers(identifier: int, authenticatedUser: db.Model) -> tuple:
     if not authenticatedUser or (user.email != authenticatedUser.email and authenticatedUser.scope != "admin"):
         return jsonify({"success": False, "message": CONSTS.Messages.UNAUTHORIZATED, "data": {}}), 401
     try:
+        if not validator.validateEmail(request.json["email"]):
+            return jsonify({"success": False, "message": "This not seems a valid email!", "data": {}}), 400
         password = request.json["password"]
         user.email = request.json["email"]
         user.name = request.json["name"]
         user.password = str(sha512(password.encode()).hexdigest())
-        # user.scope = user.scope if authenticatedUser.scope != "admin" else request.json["scope"]
+        user.scope = user.scope if authenticatedUser.scope != "admin" else request.json["scope"]
         db.session.commit()
         result = user_schema.dump(user)
         return jsonify({"success": True, "message": CONSTS.Messages.SUCCESS_MESSAGE, "data": result}), 200
@@ -69,6 +74,10 @@ def patchUpdateUser(identifier: int, authenticatedUser: db.Model) -> tuple:
         return jsonify({"success": False, "message": CONSTS.Messages.UNAUTHORIZATED, "data": {}}), 401
     if "password" in (data := request.json).keys():
         data["password"] = str(sha512(data["password"].encode()).hexdigest())
+
+    if "email" in data.keys():
+        if not validator.validateEmail(data["email"]):
+            return jsonify({"success": False, "message": "This not seems a valid email!", "data": {}}), 400
 
     commonScope = Users.myUserEditableAttributesForCommonScope()
     if not all(key in commonScope for key in data.keys()) and authenticatedUser.scope == "common":
