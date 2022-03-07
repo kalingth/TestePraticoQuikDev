@@ -140,7 +140,9 @@ root
 
 ## Utilização
 
-> **Nota**: É estritamente necessária a utilização da versão 3.8+ do Python. Recursos como a função **Walrus** foram empregados no desenvolvimento deste código.
+> **Nota 1**: É estritamente necessária a utilização da versão 3.8+ do Python. Recursos como a função **Walrus** foram empregados no desenvolvimento deste código.
+
+> **Nota 2**: É necessário que me contate para que eu possa passar o token de autenticação do mailjet. Este token deverá ser settado no arquivo CONSTANTS do pacote MISC antes de executar o programa para que os emails de notificação sejam enviados.
 
 &nbsp;&nbsp;&nbsp;&nbsp;A primeira coisa a fazer é instalar as bibliotecas utilizadas pela aplicação.
 As biblioteca podem ser instaladas através do seguinte comando através do **Terminal**/**Prompt**/**Shell**:
