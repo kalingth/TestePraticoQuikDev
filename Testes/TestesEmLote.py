@@ -1,9 +1,9 @@
 from time import time
-from Testes.EndpointTests.usersCRU import testUserCreateReadUpdate
-from Testes.EndpointTests.postsCRU import testPostCreateReadUpdateUpload
-from Testes.EndpointTests.commentCRU import testCommentCreateReadUpdate
-from Testes.EndpointTests.deleteRoutine import completeDeleteRoutine
-from Testes.EndpointTests.adminScope import testAdminScope
+from EndpointTests.usersCRU import testUserCreateReadUpdate
+from EndpointTests.postsCRU import testPostCreateReadUpdateUpload
+from EndpointTests.commentCRU import testCommentCreateReadUpdate
+from EndpointTests.deleteRoutine import completeDeleteRoutine
+from EndpointTests.adminScope import testAdminScope
 
 
 def rotina_completa():
