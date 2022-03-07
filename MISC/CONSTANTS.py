@@ -19,7 +19,7 @@ with open("MISC/MailTemplate.html") as file:
     MAIL_TEMPLATE = file.read()
 
 MAILJET_API_KEY = '900dcabc73886509be057eef39f22fc8'
-MAILJET_API_SECRET = '82f6a79fb690687426081ecd9099b070'
+MAILJET_API_SECRET = 'Por favor, me contate para que eu forneça esta chave'
 HOST = "0.0.0.0"
 MAIN_PORT = 5000
 DB_NAME = "persistQuik.db"
